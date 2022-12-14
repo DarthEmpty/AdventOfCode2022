@@ -31,3 +31,4 @@ if __name__ == \"__main__\":
 
 # Download input file
 curl --cookie ./cookies.txt https://adventofcode.com/2022/day/$DAY_NO_DIGIT/input > $DAY_NO/input.txt
+chmod =r $DAY_NO/input.txt
