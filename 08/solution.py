@@ -27,10 +27,10 @@ def is_visible(row: int, column: int, grid: np.ndarray):
 def part_1(contents: List[str]):
     grid = np.array([list(row) for row in contents]).astype(int)      
     
-    return [
-        is_visible(row, column, grid)
-        for row, column in np.ndindex(grid.shape)
-    ].count(True)
+    return len([
+        True for row, column in np.ndindex(grid.shape)
+        if is_visible(row, column, grid)
+    ])
 
 
 def part_2(contents):
