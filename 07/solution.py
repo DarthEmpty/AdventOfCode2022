@@ -49,11 +49,14 @@ def construct_tree(command_list: List[str]) -> Node:
     return cd("/", current_node)
 
 
-def bfs(root: Directory):
+def dfs(root: Directory):
     nodes = [root]
     
     while nodes:
-        current = nodes.pop(0)
+        # FUN FACT: Using `nodes` like a queue instead of a stack makes this a bfs!
+        # Idk if there's much advantage to either except that you don't have to
+        # specify index 0 in the `pop` params for a dfs.
+        current = nodes.pop()
         
         nodes.extend(
             child for child in current.children.values()
@@ -65,14 +68,14 @@ def bfs(root: Directory):
 
 def small_sum(root: Directory, limit=1e5) -> int:    
     return sum(
-        size for node in bfs(root) 
+        size for node in dfs(root) 
         if (size := node.size()) <= limit
     )
 
 
 def big_collection(root: Directory, minimum=0) -> int:   
     return min(
-        size for node in bfs(root)
+        size for node in dfs(root)
         if (size := node.size()) >= minimum
     )
 
