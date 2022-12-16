@@ -73,7 +73,7 @@ def small_sum(root: Directory, limit=1e5) -> int:
     )
 
 
-def big_collection(root: Directory, minimum=0) -> int:   
+def big_min(root: Directory, minimum=0) -> int:   
     return min(
         size for node in dfs(root)
         if (size := node.size()) >= minimum
@@ -89,7 +89,7 @@ def part_1(contents: List[str]) -> Tuple[Node, int]:
 
 def part_2(tree: Node) -> int:    
     tree_size = tree.size()    
-    return big_collection(tree, minimum=int(tree_size - 4e7))
+    return big_min(tree, minimum=int(tree_size - 4e7))
 
 
 if __name__ == "__main__":
