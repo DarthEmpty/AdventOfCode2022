@@ -49,41 +49,32 @@ def construct_tree(command_list: List[str]) -> Node:
     return cd("/", current_node)
 
 
-def small_sum(root: Directory, limit = 1e5) -> int:
-    total = 0
+def bfs(root: Directory):
     nodes = [root]
-    
-    # bfs
-    # Probably not as time efficient as possible since sizes are worked out multiple times
-    # (once for each node between root and current inclusive)
-    while nodes:
-        current = nodes.pop(0)
-        size = current.size()
-        total += size if size <= limit else 0
-        
-        nodes.extend([
-            child for child in current.children.values()
-            if isinstance(child, Directory)
-        ])
-    
-    return total
-
-
-def big_collection(root: Directory, start: int, minimum=0):
-    nodes = [root]
-    smallest = start
     
     while nodes:
         current = nodes.pop(0)
-        size = current.size()
-        smallest = size if size >= minimum and size < smallest else smallest
         
-        nodes.extend([
+        nodes.extend(
             child for child in current.children.values()
             if isinstance(child, Directory)
-        ])
-    
-    return smallest
+        )
+        
+        yield current
+
+
+def small_sum(root: Directory, limit=1e5) -> int:    
+    return sum(
+        size for node in bfs(root) 
+        if (size := node.size()) <= limit
+    )
+
+
+def big_collection(root: Directory, minimum=0) -> int:   
+    return min(
+        size for node in bfs(root)
+        if (size := node.size()) >= minimum
+    )
 
 
 def part_1(contents: List[str]) -> Tuple[Node, int]:    
@@ -93,18 +84,16 @@ def part_1(contents: List[str]) -> Tuple[Node, int]:
     )
 
 
-def part_2(tree: Node) -> int:
-    tree_size = tree.size()
-    minimum = int(tree_size - 4e7)
-    
-    return big_collection(tree, tree_size, minimum)
+def part_2(tree: Node) -> int:    
+    tree_size = tree.size()    
+    return big_collection(tree, minimum=int(tree_size - 4e7))
 
 
 if __name__ == "__main__":
     with open(FILENAME) as file:
         contents = file.read().splitlines()
     
-    tree, size =part_1(contents)
+    tree, size = part_1(contents)
     print(size)
     
     print(part_2(tree))
