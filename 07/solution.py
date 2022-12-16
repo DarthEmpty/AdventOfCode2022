@@ -66,14 +66,14 @@ def dfs(root: Directory):
         yield current
 
 
-def small_sum(root: Directory, limit=1e5) -> int:    
+def small_sum(root: Directory, limit: int) -> int:    
     return sum(
         size for node in dfs(root) 
         if (size := node.size()) <= limit
     )
 
 
-def big_min(root: Directory, minimum=0) -> int:   
+def big_min(root: Directory, minimum: int) -> int:   
     return min(
         size for node in dfs(root)
         if (size := node.size()) >= minimum
@@ -83,7 +83,7 @@ def big_min(root: Directory, minimum=0) -> int:
 def part_1(contents: List[str]) -> Tuple[Node, int]:    
     return (
         current_node := construct_tree(contents),
-        small_sum(current_node)
+        small_sum(current_node, limit=1e5)
     )
 
 
