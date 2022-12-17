@@ -8,7 +8,7 @@ def setup_grid(contents: List[str]) -> np.ndarray:
     return np.array([list(row) for row in contents]).astype(int)
 
 
-def cardinals(row: int, column: int, grid: np.ndarray):
+def cardinals(row: int, column: int, grid: np.ndarray) -> List[np.ndarray]:
     # North and West are sliced in reverse so that all values
     # are ordered by distance from grid[row, column]
     
@@ -20,7 +20,7 @@ def cardinals(row: int, column: int, grid: np.ndarray):
     ]
 
 
-def viewing_distance(current_tree, other_trees):
+def viewing_distance(current_tree: int, other_trees: np.ndarray) -> int:
     boundary = np.argwhere(current_tree <= other_trees)
     return int(boundary[0] + 1) if boundary.size else other_trees.size
 
@@ -72,4 +72,3 @@ if __name__ == "__main__":
     
     print(part_1(contents))
     print(part_2(contents))
-
