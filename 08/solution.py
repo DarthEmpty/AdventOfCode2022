@@ -20,8 +20,9 @@ def cardinals(row: int, column: int, grid: np.ndarray):
     ]
 
 
-# def visible_trees(current_tree, other_trees):
-    
+def viewing_distance(current_tree, other_trees):
+    boundary = np.argwhere(current_tree <= other_trees)
+    return int(boundary[0] + 1) if boundary.size else other_trees.size
 
 
 def is_visible(row: int, column: int, grid: np.ndarray) -> bool:
@@ -39,12 +40,12 @@ def is_visible(row: int, column: int, grid: np.ndarray) -> bool:
 def scenic_score(row: int, column: int, grid: np.ndarray) -> int:
     # Trees on the edge have a score of 0
     if not (row and column):
-        return 0
+        return 0    
     
-    # for direction in cardinals(row, column, grid)
-    
-    
-    # return np.prod(cardinals_to_boundaries)
+    return np.prod([
+        viewing_distance(grid[row, column], direction)
+        for direction in cardinals(row, column, grid)
+    ])
 
 
 def part_1(contents: List[str]) -> int:
@@ -70,5 +71,5 @@ if __name__ == "__main__":
         contents = file.read().splitlines()
     
     print(part_1(contents))
-    # print(part_2(contents))
+    print(part_2(contents))
 
