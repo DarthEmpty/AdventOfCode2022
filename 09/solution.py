@@ -55,20 +55,35 @@ def part_1(contents):
     
     for direction, magnitude in commands(contents):
         head += interpret_command(direction, int(magnitude))
-        journey = list(steps(tail, head))
+        journey = steps(tail, head)
         visited.extend(accumulate(journey, initial=tail))
         tail = visited[-1]
     
     return len(np.unique(visited, axis=0))
 
 
+# TODO: Figure out why answer is too small
 def part_2(contents):
-    return ""
+    knots = [np.zeros((2,)) for _ in range(10)]
+    visited = []
+    
+    for direction, magnitude in commands(contents):
+        knots[0] += interpret_command(direction, int(magnitude))
+        
+        for i in range(1, len(knots)):
+            journey = steps(knots[i], knots[i - 1])
+            path = list(accumulate(journey, initial=knots[i]))
+            knots[i] = path[-1]
+            
+            if i == len(knots) - 1:
+                visited.extend(path)
+
+    return len(np.unique(visited, axis=0))
 
 
 if __name__ == "__main__":
     with open(FILENAME) as file:
         contents = file.read().splitlines()
     
-    print(part_1(contents))
+    print(part_1(contents.copy()))
     print(part_2(contents))
