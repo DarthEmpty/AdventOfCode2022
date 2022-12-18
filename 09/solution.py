@@ -25,17 +25,17 @@ def interpret_command(dir: str, mag: int) -> VECTOR:
         return VECTOR([0, -mag])
     
 
-def step(Vec: VECTOR):
+def step_along(Vec: VECTOR):
     # A "step" is a vector between [1, 1] and [-1, -1] representing
     # the next step to take to progress along `Vec` on a grid.
     # The elements are integers {1, 0, -1} and are determined by
-    # rounding the unit vector of `Vec` away from [0, 0] (so that
-    # travelling diagonally is prioritised)
+    # rounding the unit vector of `Vec` away from [0, 0].
+    # (So that travelling diagonally is prioritised)
     
     return VECTOR([
-            np.ceil(v) if v > 0 else np.floor(v)
-            for v in (Vec / np.linalg.norm(Vec))
-        ])
+        np.ceil(v) if v > 0 else np.floor(v)
+        for v in (Vec / np.linalg.norm(Vec))
+    ])
 
 
 def steps(tail: VECTOR, head: VECTOR) -> Generator[VECTOR, None, None]:
@@ -43,7 +43,7 @@ def steps(tail: VECTOR, head: VECTOR) -> Generator[VECTOR, None, None]:
     
     # Head and Tail are adjacent if their elements are {1, 0, -1}
     while not (np.all(diff <= 1) and np.all(diff >= -1)):
-        next_step = step(diff)
+        next_step = step_along(diff)
         diff -= next_step
         yield next_step
     
