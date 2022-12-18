@@ -38,11 +38,15 @@ def step_along(Vec: VECTOR):
     ])
 
 
-def steps(tail: VECTOR, head: VECTOR) -> Generator[VECTOR, None, None]:
-    diff = head - tail
+def is_unit_vec(vec: VECTOR):
+    return np.all(vec <= 1) and np.all(vec >= -1)
+
+
+def steps(start: VECTOR, end: VECTOR) -> Generator[VECTOR, None, None]:
+    diff = end - start
     
-    # Head and Tail are adjacent if their elements are {1, 0, -1}
-    while not (np.all(diff <= 1) and np.all(diff >= -1)):
+    # Head and Tail are adjacent if the elements of diff are {1, 0, -1}
+    while not is_unit_vec(diff):
         next_step = step_along(diff)
         diff -= next_step
         yield next_step
@@ -57,26 +61,26 @@ def part_1(contents):
         head += interpret_command(direction, int(magnitude))
         journey = steps(tail, head)
         visited.extend(accumulate(journey, initial=tail))
-        tail = visited[-1]
+        tail = visited[-1].copy()
     
     return len(np.unique(visited, axis=0))
 
 
-# TODO: Figure out why answer is too small
 def part_2(contents):
-    knots = [np.zeros((2,)) for _ in range(10)]
+    knots = np.array([np.zeros((2,)) for _ in range(10)])
     visited = []
     
     for direction, magnitude in commands(contents):
-        knots[0] += interpret_command(direction, int(magnitude))
+        magnitude = int(magnitude)
+        knots[0] += interpret_command(direction, magnitude)
         
-        for i in range(1, len(knots)):
-            journey = steps(knots[i], knots[i - 1])
-            path = list(accumulate(journey, initial=knots[i]))
-            knots[i] = path[-1]
-            
-            if i == len(knots) - 1:
-                visited.extend(path)
+        for _ in range(magnitude):
+            for i in range(1, len(knots)):
+                diff = knots[i - 1] - knots[i]
+                next_step = step_along(diff) if not is_unit_vec(diff) else np.zeros((2,))
+                knots[i] += next_step
+                
+            visited.append(knots[-1].copy())
 
     return len(np.unique(visited, axis=0))
 
