@@ -59,15 +59,16 @@ def part_1(contents):
     
     for direction, magnitude in commands(contents):
         head += interpret_command(direction, int(magnitude))
-        journey = steps(tail, head)
-        visited.extend(accumulate(journey, initial=tail))
+        visited.extend(
+            accumulate(steps(tail, head), initial=tail)
+        )
         tail = visited[-1].copy()
     
     return len(np.unique(visited, axis=0))
 
 
 def part_2(contents):
-    knots = np.array([np.zeros((2,)) for _ in range(10)])
+    knots = [np.zeros((2,)) for _ in range(10)]
     visited = []
     
     for direction, magnitude in commands(contents):
