@@ -9,15 +9,17 @@ mkdir $DAY_NO;
 
 
 # Initialise the Python file
-echo "FILENAME = \"${DAY_NO}/input.txt\"
+echo "from typing import List
+
+FILENAME = \"${DAY_NO}/input.txt\"
 
 
-def part_1(contents):
-    return \"\"
+def part_1(contents: List[str]) -> int:
+    return 0
 
 
-def part_2(contents):
-    return \"\"
+def part_2(contents: List[str]) -> int:
+    return 0
 
 
 if __name__ == \"__main__\":
