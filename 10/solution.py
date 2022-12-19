@@ -14,10 +14,9 @@ def interpreted(commands: List[str]) -> Generator[Tuple[int, int], None, None]:
             yield 1, 0
 
 
-# TODO: Answer is too low
 def part_1(contents: List[str]) -> int:
     register = 1
-    history = []
+    history = [0]  # Makes list 1-indexed to match question
     
     for duration, value in interpreted(contents):
         history.extend(register for _ in range(duration))
@@ -25,7 +24,7 @@ def part_1(contents: List[str]) -> int:
     
     history.append(register)
     
-    return sum(cycle * history[cycle] for cycle in range(20, 200, 40))
+    return sum(cycle * history[cycle] for cycle in range(20, 221, 40))
 
 
 def part_2(contents: List[str]) -> int:
