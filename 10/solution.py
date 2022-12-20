@@ -39,11 +39,11 @@ def part_1(contents: List[str]) -> int:
     )
 
 
-def part_2(contents: List[str]) -> List[List[str]]:
+def part_2(contents: List[str]) -> np.ndarray:
     history = execute(contents)
     crt = [
-        "#" if cycle % 40 in margin(history[cycle], 1)
-        else "." for cycle in range(len(history))
+        "#" if cycle % 40 in margin(value, 1)
+        else "." for cycle, value in enumerate(history)
     ]
     
     return np.reshape(crt, (6, 40))
