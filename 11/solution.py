@@ -2,33 +2,46 @@ from typing import List
 from monkey import Monkey, make_monkey
 from math import prod
 
-FILENAME = "11/small.txt"
+FILENAME = "11/input.txt"
 
 
-def rounds(amount: int, monkeys: List[Monkey]):
+def rounds(amount: int, monkeys: List[Monkey], anxious_mod=0):
     for _ in range(amount):
         for monkey in monkeys:
-            for target, item in monkey():
-                monkeys[target].receive(item)
+            for target, item in monkey():                
+                monkeys[target].receive(
+                    item % anxious_mod if anxious_mod else item
+                )
 
 
 def part_1(contents: List[str]) -> int:
-    monkeys = [make_monkey(desc) for desc in contents]
+    monkeys = [make_monkey(desc)[0] for desc in contents]
 
     rounds(20, monkeys)
     
-    activity = [monkey.total_inspections() for monkey in monkeys]
-    return prod(sorted(activity)[-2:])
+    activity = sorted(monkey.total_inspections() for monkey in monkeys)
+    return activity[-1] * activity[-2]
 
 
-# TODO: Modular arithmetic
+# Had to look this one up and I still don't understand it.
+# My confusion as to why this works primarily hinges on the fact that
+# the modulo operation doesn't conserve the magnitude of the original number.
+# So, 17 mod 12 = 5, but then 17 * 2 = 34, whereas 5 * 2 = 10.
+# 17 = 5 (mod 12), which makes sense, but then surely the largest number
+# one could get by multiplying 2 numbers from the mod space is (mod - 1) * (mod - 1)?
 def part_2(contents: List[str]) -> int:
-    monkeys = [make_monkey(desc, anxious=True) for desc in contents]
+    monkeys = []
+    mod = 1
     
-    rounds(10000, monkeys)
+    for desc in contents:
+        monkey, divisor = make_monkey(desc, anxious=True)
+        monkeys.append(monkey)
+        mod *= divisor
     
-    activity = [monkey.total_inspections() for monkey in monkeys]
-    return prod(sorted(activity)[-2:])
+    rounds(10000, monkeys, anxious_mod=mod)
+    
+    activity = sorted(monkey.total_inspections() for monkey in monkeys)
+    return activity[-1] * activity[-2]
 
 
 if __name__ == "__main__":
@@ -37,4 +50,3 @@ if __name__ == "__main__":
     
     print(part_1(contents))
     print(part_2(contents))
-

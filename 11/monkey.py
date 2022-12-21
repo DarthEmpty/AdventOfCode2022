@@ -6,7 +6,7 @@ from typing import List, Callable, Tuple
 class Monkey:
     def __init__(self, items: List[int], op: Callable, test: Callable, anxious=False) -> None:
         # Fields
-        self._items = _array(items)
+        self._items = _int_array(items)
         self._anxious = anxious
         self._total = 0
         
@@ -17,7 +17,7 @@ class Monkey:
     def __call__(self) -> List[Tuple[int, int]]:
         items = self._items
         self._total += np.size(items)
-        self._items = _array([])
+        self._items = _int_array([])
         
         items = self._op(items)
 
@@ -36,8 +36,8 @@ class Monkey:
         return self._total
 
 
-def _array(arraylike) -> np.ndarray:
-    return np.array(arraylike, dtype=np.longlong)
+def _int_array(arraylike) -> np.ndarray:
+    return np.array(arraylike, dtype=np.int)
 
 
 def _find_num(string: str):
@@ -50,11 +50,12 @@ def make_monkey(desc: str, anxious=False) -> Monkey:
     items = [int(item) for item in re.findall("\d+", desc[1])]
     op = lambda old: eval(desc[2].lstrip().removeprefix("Operation: new = "))
     
+    divisor = _find_num(desc[3])
     test = lambda new: np.where(
-        new % _find_num(desc[3]) == 0, 
+        new % divisor == 0, 
         _find_num(desc[4]),
         _find_num(desc[5])
     )
     
-    return Monkey(items, op, test, anxious)
+    return Monkey(items, op, test, anxious), divisor
     
