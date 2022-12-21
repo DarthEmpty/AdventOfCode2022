@@ -1,4 +1,5 @@
 import re
+import numpy as np
 from typing import List, Callable, Tuple
 
 
@@ -35,17 +36,21 @@ class Monkey:
         return self._total
 
 
+def find_num(string: str):
+    return int(re.search("\d+", string).group(0))
+
+
 def make_monkey(desc: str, anxious=False) -> Monkey:
-    num_pattern = re.compile("\d+")
     desc = desc.split("\n")
     
-    items = [int(item) for item in re.findall(num_pattern, desc[1])]
+    items = [int(item) for item in re.findall("\d+", desc[1])]
     op = lambda old: eval(desc[2].lstrip().removeprefix("Operation: new = "))
     
-    divisor = re.search(num_pattern, desc[3]).group(0)
-    t_branch = re.search(num_pattern, desc[4]).group(0)
-    f_branch = re.search(num_pattern, desc[5]).group(0)
-    test = lambda new: int(t_branch) if new % int(divisor) == 0 else int(f_branch)
+    test = lambda new: np.where(
+        new % find_num(desc[3]) == 0, 
+        find_num(desc[4]),
+        find_num(desc[5])
+    )
     
     return Monkey(items, op, test, anxious)
     

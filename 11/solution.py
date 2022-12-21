@@ -17,9 +17,8 @@ def part_1(contents: List[str]) -> int:
 
     rounds(20, monkeys)
     
-    return prod(
-        sorted(monkey.total_inspections() for monkey in monkeys)[-2:]
-    )
+    activity = (monkey.total_inspections() for monkey in monkeys)
+    return prod(sorted(activity)[-2:])
 
 
 def part_2(contents: List[str]) -> int:
