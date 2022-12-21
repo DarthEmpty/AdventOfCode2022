@@ -21,6 +21,7 @@ def part_1(contents: List[str]) -> int:
     return prod(sorted(activity)[-2:])
 
 
+# TODO: Modular arithmetic
 def part_2(contents: List[str]) -> int:
     monkeys = [make_monkey(desc, anxious=True) for desc in contents]
     
