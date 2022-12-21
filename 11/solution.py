@@ -2,7 +2,7 @@ from typing import List
 from monkey import Monkey, make_monkey
 from math import prod
 
-FILENAME = "11/input.txt"
+FILENAME = "11/small.txt"
 
 
 def rounds(amount: int, monkeys: List[Monkey]):
@@ -17,7 +17,7 @@ def part_1(contents: List[str]) -> int:
 
     rounds(20, monkeys)
     
-    activity = (monkey.total_inspections() for monkey in monkeys)
+    activity = [monkey.total_inspections() for monkey in monkeys]
     return prod(sorted(activity)[-2:])
 
 
@@ -26,7 +26,7 @@ def part_2(contents: List[str]) -> int:
     
     rounds(10000, monkeys)
     
-    activity = (monkey.total_inspections() for monkey in monkeys)
+    activity = [monkey.total_inspections() for monkey in monkeys]
     return prod(sorted(activity)[-2:])
 
 
