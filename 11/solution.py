@@ -23,12 +23,6 @@ def part_1(contents: List[str]) -> int:
     return activity[-1] * activity[-2]
 
 
-# Had to look this one up and I still don't understand it.
-# My confusion as to why this works primarily hinges on the fact that
-# the modulo operation doesn't conserve the magnitude of the original number.
-# So, 17 mod 12 = 5, but then 17 * 2 = 34, whereas 5 * 2 = 10.
-# 17 = 5 (mod 12), which makes sense, but then surely the largest number
-# one could get by multiplying 2 numbers from the mod space is (mod - 1) * (mod - 1)?
 def part_2(contents: List[str]) -> int:
     monkeys = []
     mod = 1
