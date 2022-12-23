@@ -1,13 +1,32 @@
-import numpy as np
 from typing import List
-from grid_map import GridMap
+from grid_map import GridMap, Node, contains_coords
 
 FILENAME = "12/input.txt"
 
 
 def part_1(contents: List[str]) -> int:
     letter_map = GridMap(contents)
-    return letter_map
+    nodes = [Node(letter_map.start)]
+    
+    while nodes:
+        # Consider the neighbours of one of the nodes that we're at
+        current_node = nodes.pop(0)
+        neighbours = letter_map.reachable_neighbours(current_node.coords)
+        
+        # Return the number of steps if we see the end!
+        if contains_coords(letter_map.end, neighbours):
+            current_node.add_children(letter_map.end)
+            return current_node.children[0].count_steps()
+        
+        # Otherwise, visit all the neighbours by adding them to the queue
+        letter_map.visit(neighbours)
+        current_node.add_children(neighbours)
+        nodes.extend(current_node.children)
+    
+    # Something went wrong!
+    print("We ran out of nodes to explore... here's what we did find:")
+    print(letter_map)    
+    return -1
 
 
 def part_2(contents: List[str]) -> int:
