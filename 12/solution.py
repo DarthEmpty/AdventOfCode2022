@@ -29,6 +29,7 @@ def part_1(contents: List[str]) -> int:
     return -1
 
 
+# TODO: Similar to Part 1 but in reverse! (From End to an "a")
 def part_2(contents: List[str]) -> int:
     return 0
 
