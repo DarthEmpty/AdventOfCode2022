@@ -9,14 +9,14 @@ color_init()  # Using colours because why not?
 
 
 class GridMap:
-    def __init__(self, strings: List[str]):
+    def __init__(self, strings: List[str], backwards=False):
         self._contents = np.array([list(line) for line in strings])
         self._visited = np.zeros(self._contents.shape, dtype=bool)
+        self._backwards = backwards
         
         self._start = _COORDS(*np.where(self._contents == "S"))
         self._end = _COORDS(*np.where(self._contents == "E"))
         
-        self._visited[self._start] = True
         self._contents[self._start] = "a"
         self._contents[self._end] = "z"
     
@@ -48,6 +48,9 @@ class GridMap:
         start_value = self._contents[start].view(np.uint32)
         end_value = self._contents[end].view(np.uint32)
         
+        if self._backwards:
+            return np.isin(end_value, np.arange(start_value - 1, ord("z") + 1))
+        
         return np.isin(end_value, np.arange(start_value + 2))
     
     def _has_been_visited(self, coords: _COORDS) -> np.ndarray[Any, bool]:
@@ -76,6 +79,9 @@ class GridMap:
     
     def visit(self, coords: _COORDS):
         self._visited[coords] = True
+    
+    def height_of(self, coords: _COORDS) -> str:
+        return self._contents[coords][0]
 
 
 class Node:
