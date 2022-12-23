@@ -9,7 +9,7 @@ def bfs(grid_map: GridMap, start_node: Node, end_condition: Callable) -> int:
     nodes = [start_node]
     
     while nodes:
-        # Consider the neighbours of one of the nodes that we're at
+        # Consider one of the nodes that we're at
         current_node = nodes.pop(0)
         
         # Return the number of steps if we're at the end!
