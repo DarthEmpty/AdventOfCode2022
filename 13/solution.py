@@ -71,9 +71,9 @@ def part_2(contents: str) -> int:
     packets.append([[2]])
     packets.append([[6]])
     
-    sorted_packs = packet_quicksort(packets)
+    packets = packet_quicksort(packets)
     
-    return (sorted_packs.index([[2]]) + 1) * (sorted_packs.index([[6]]) + 1)
+    return (packets.index([[2]]) + 1) * (packets.index([[6]]) + 1)
 
 
 if __name__ == "__main__":
