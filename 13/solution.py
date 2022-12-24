@@ -43,21 +43,43 @@ def in_order(left: List, right: List) -> Union[bool, None]:
     return None
 
 
-def part_1(contents: List[str]) -> int:     
+def packet_quicksort(elements: List[Union[int, List]]) -> List:
+    if len(elements) <= 1:
+        return elements
+    
+    left = []
+    right = []
+    pivot = elements.pop()
+
+    for element in elements:
+        side = left if in_order(element, pivot) else right
+        side.append(element)
+        
+    return packet_quicksort(left) + [pivot] + packet_quicksort(right)
+
+
+def part_1(contents: str) -> int:     
     return sum(
-        idx for idx, left, right in enum_pairs(contents)
+        idx for idx, left, right
+        in enum_pairs(contents.split("\n\n"))
         if in_order(left, right)
     )
 
 
-def part_2(contents: List[str]) -> int:
-    return 0
+def part_2(contents: str) -> int:
+    packets = [eval(packet) for packet in contents.split()]
+    packets.append([[2]])
+    packets.append([[6]])
+    
+    sorted_packs = packet_quicksort(packets)
+    
+    return (sorted_packs.index([[2]]) + 1) * (sorted_packs.index([[6]]) + 1)
 
 
 if __name__ == "__main__":
     with open(FILENAME) as file:
-        contents = file.read().split("\n\n")
+        contents = file.read()
     
     print(part_1(contents))
-    # print(part_2(contents))
+    print(part_2(contents))
 
