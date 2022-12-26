@@ -63,12 +63,28 @@ def part_1(contents: List[str]) -> int:
         
             sand = new_sand
         
-        rocks.add(sand)
         count += 1
+        rocks.add(sand)
 
 
 def part_2(contents: List[str]) -> int:
-    return 0
+    rocks = init_rocks(contents)
+    floor_height = max([rock[1] for rock in rocks]) + 2
+    count = 0
+    
+    while True:
+        sand = SAND_SOURCE
+        while (new_sand := fall_into(sand, rocks)) is not None:
+            if new_sand[1] == floor_height:
+                break
+        
+            sand = new_sand
+        
+        count += 1
+        if sand == SAND_SOURCE:
+            return count
+
+        rocks.add(sand)
 
 
 if __name__ == "__main__":
